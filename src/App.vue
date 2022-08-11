@@ -1,48 +1,42 @@
-<template>
-  <div id="page" @click="setFocus()">
-    <h1>Purrdle</h1>
-    <h2>Like wordle, but it purrs</h2>
-    <div
-      class="guess-holder"
-      v-for="submission in submissions"
-      :key="submission"
-    >
-      <div v-for="(letter, index) in submission[0]" :key="index">
-        <p class="letters" :class="setClass(submission[1][index])">
-          {{ letter }}
-        </p>
-      </div>
+<template @click="setFocus()">
+  <h1>Purrdle</h1>
+  <h2>Like wordle, but it purrs</h2>
+  <div class="guess-holder" v-for="submission in submissions" :key="submission">
+    <div v-for="(letter, index) in submission[0]" :key="index">
+      <p class="letters" :class="setClass(submission[1][index])">
+        {{ letter }}
+      </p>
     </div>
-    <div v-if="winning">
-      <img :src="winImage" alt="happy cat" />
-    </div>
-    <div v-else-if="losing">
-      <h2>Sorry! The word was {{ target }}</h2>
-      <img :src="loseImage" alt="sad cat" />
-    </div>
-    <div v-else>
-      <div class="guess-holder">
-        <p class="letters">{{ guess[0] || "" }}</p>
-        <p class="letters">{{ guess[1] || "" }}</p>
-        <p class="letters">{{ guess[2] || "" }}</p>
-        <p class="letters">{{ guess[3] || "" }}</p>
-        <p class="letters">{{ guess[4] || "" }}</p>
-      </div>
-      <div v-if="!inDictionary">Not in dictionary</div>
-    </div>
-    <input
-      type="text"
-      id="guessInput"
-      v-model="guess"
-      maxlength="5"
-      v-on:keyup.enter="handleGuess(guess)"
-      @input="
-        if (guess?.length < 5) {
-          inDictionary = true;
-        }
-      "
-    />
   </div>
+  <div v-if="winning">
+    <img :src="winImage" alt="happy cat" />
+  </div>
+  <div v-else-if="losing">
+    <h2>Sorry! The word was {{ target }}</h2>
+    <img :src="loseImage" alt="sad cat" />
+  </div>
+  <div v-else>
+    <div class="guess-holder">
+      <p class="letters">{{ guess[0] || "" }}</p>
+      <p class="letters">{{ guess[1] || "" }}</p>
+      <p class="letters">{{ guess[2] || "" }}</p>
+      <p class="letters">{{ guess[3] || "" }}</p>
+      <p class="letters">{{ guess[4] || "" }}</p>
+    </div>
+    <div v-if="!inDictionary">Not in dictionary</div>
+  </div>
+  <input
+    type="text"
+    id="guessInput"
+    v-model="guess"
+    maxlength="5"
+    v-on:keyup.enter="handleGuess(guess)"
+    @input="
+      if (guess?.length < 5) {
+        inDictionary = true;
+      }
+    "
+  />
 </template>
 
 <script>
@@ -210,11 +204,6 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
-}
-
-#page {
-  height: 100vh;
-  width: 100vw;
 }
 
 #guessInput {
