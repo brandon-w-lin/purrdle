@@ -24,6 +24,7 @@
       <p class="letters">{{ guess[4] || "" }}</p>
     </div>
     <div v-if="!inDictionary">Not in dictionary</div>
+    <div v-else-if="alreadySubmitted">Word already submitted</div>
   </div>
   <input
     type="text"
@@ -34,6 +35,7 @@
     @input="
       if (guess?.length < 5) {
         inDictionary = true;
+        alreadySubmitted = false;
       }
     "
   />
@@ -52,6 +54,7 @@ export default {
       winning: false,
       losing: false,
       inDictionary: true,
+      alreadySubmitted: false,
       winImages: [
         "https://i.giphy.com/media/LRHBzifRrWQky9zAO7/giphy.webp",
         "https://i.giphy.com/media/T2zhJop5K1joHXd3DJ/giphy.webp",
@@ -129,6 +132,13 @@ export default {
         });
       return test;
     },
+    isAlreadySubmitted(word) {
+      const words = this.submissions.map((submission) =>
+        submission[0].join("")
+      );
+      this.alreadySubmitted = true;
+      return words.includes(word.toUpperCase());
+    },
     async handleGuess(guess) {
       // Guard gates for win condition, length, in dictionary
       if (this.winning) return;
@@ -136,7 +146,7 @@ export default {
       if (guess?.length != 5) return;
       this.inDictionary = await this.checkInDictionary(guess);
       if (!this.inDictionary) return;
-
+      if (this.isAlreadySubmitted(guess)) return;
       guess = guess?.toUpperCase();
       this.letters[0] = guess[0] || "";
       this.letters[1] = guess[1] || "";
@@ -163,6 +173,7 @@ export default {
       this.handleWinLoss();
       // Clear out the v-model guess
       this.guess = "";
+      this.alreadySubmitted = false;
     },
     setClass(score) {
       if (score == 2) {
