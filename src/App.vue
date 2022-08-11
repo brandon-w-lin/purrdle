@@ -1,10 +1,5 @@
-<template id="page" @click="setFocus()">
+<template>
   <div id="page" @click="setFocus()">
-    <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view /> -->
     <h1>Purrdle</h1>
     <h2>Like wordle, but it purrs</h2>
     <div
