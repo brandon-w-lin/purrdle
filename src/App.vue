@@ -23,7 +23,7 @@
     </div>
     <div v-else-if="losing">
       <h2>Sorry! The word was {{ target }}</h2>
-      <img :src="loseImage" alt="happy cat" />
+      <img :src="loseImage" alt="sad cat" />
     </div>
     <div v-else>
       <div class="guess-holder">
@@ -52,11 +52,11 @@
 
 <script>
 import axios from "axios";
-// import { RuntimeGlobals } from "webpack";
+
 export default {
   data() {
     return {
-      target: "TABLE",
+      target: "",
       guess: "",
       letters: [],
       submissions: [],
@@ -87,6 +87,16 @@ export default {
     };
   },
   methods: {
+    getWord() {
+      axios
+        .get("https://random-word-api.herokuapp.com/word?length=5")
+        .then((response) => {
+          this.target = response.data[0].toUpperCase();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     matchColor(imgSrc) {
       const myImg = new Image();
       myImg.crossOrigin = "Anonymous";
@@ -95,7 +105,6 @@ export default {
         const context = document.createElement("canvas").getContext("2d");
         context.drawImage(myImg, 0, 0);
         const { data } = context.getImageData(10, 10, 1, 1);
-        console.log(data);
         document.body.style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
       };
     },
@@ -105,32 +114,27 @@ export default {
         .pop()[1]
         .reduce((a, b) => a + b);
       if (score == 10) {
-        console.log("win");
         this.winning = true;
         this.winImage =
           this.winImages[Math.floor(Math.random() * this.winImages.length)];
         this.matchColor(this.winImage);
       }
       if (this.submissions.length == 6) {
-        console.log("lose");
         this.losing = true;
         this.loseImage =
           this.loseImages[Math.floor(Math.random() * this.winImages.length)];
       }
     },
     checkInDictionary(word) {
-      console.log("checking if in dictionary");
       let test = axios
         .get("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
         .then((response) => {
-          // console.log(response.status);
           if (response.status == 200) {
             return true;
           }
           return false;
         })
         .catch(() => {
-          // console.log("not in dictionary");
           return false;
         });
       return test;
@@ -185,6 +189,7 @@ export default {
   },
   mounted() {
     this.setFocus();
+    this.getWord();
   },
 };
 </script>
