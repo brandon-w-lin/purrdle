@@ -1,4 +1,4 @@
-<template>
+<template id="page" @click="setFocus()">
   <div id="page" @click="setFocus()">
     <!-- <nav>
     <router-link to="/">Home</router-link> |
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div v-if="winning">
-      <div>Congrats, you win!</div>
+      <img :src="winImage" alt="happy cat" />
     </div>
     <div v-else-if="losing">Sorry! The word was {{ target }}</div>
     <div v-else-if="!inDictionary">Not in dictionary</div>
@@ -47,6 +47,7 @@
 
 <script>
 import axios from "axios";
+// import { RuntimeGlobals } from "webpack";
 export default {
   data() {
     return {
@@ -57,9 +58,41 @@ export default {
       winning: false,
       losing: false,
       inDictionary: true,
+      winImages: [
+        "https://i.giphy.com/media/LRHBzifRrWQky9zAO7/giphy.webp",
+        "https://i.giphy.com/media/T2zhJop5K1joHXd3DJ/giphy.webp",
+        "https://i.giphy.com/media/IcJ6n6VJNjRNS/giphy.webp",
+        "https://i.giphy.com/media/Jmlv4CUO1qWlGWJf3J/giphy.webp",
+        "https://i.giphy.com/media/H3NF3JvE1mOsOXb8l3/giphy.webp",
+        "https://i.giphy.com/media/jEl8zlvatJBVS/giphy.webp",
+        "https://i.giphy.com/media/AwroDzTSZ2SDRjbGll/giphy.webp",
+        "https://i.giphy.com/media/VP62gZkQXtTgfFUa1Z/giphy.webp",
+        "https://i.giphy.com/media/jU2IAEtFVGBDMu2vWg/giphy.webp",
+        "https://i.giphy.com/media/hGFiFeUFnvUPjW8lEZ/giphy.webp",
+        "https://i.giphy.com/media/2YgW9PZJpIhjL7b6Zt/giphy.webp",
+        "https://i.giphy.com/media/117IVXpuqIITx6/giphy.webp",
+      ],
+      winImage: "",
+      loseImages: [
+        "https://i.giphy.com/media/BCI6CWVkNUefm/giphy.webp",
+        "https://i.giphy.com/media/IkwD0hpaqza8MM5e8J/giphy.webp",
+        "https://i.giphy.com/media/4L7Q2eAKjd2wM/giphy.webp",
+      ],
     };
   },
   methods: {
+    matchColor(imgSrc) {
+      const myImg = new Image();
+      myImg.crossOrigin = "Anonymous";
+      myImg.src = imgSrc;
+      myImg.onload = () => {
+        const context = document.createElement("canvas").getContext("2d");
+        context.drawImage(myImg, 0, 0);
+        const { data } = context.getImageData(10, 10, 1, 1);
+        console.log(data);
+        document.body.style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
+      };
+    },
     handleWin() {
       let score = this.submissions
         .slice(-1)
@@ -68,6 +101,9 @@ export default {
       if (score == 10) {
         console.log("win");
         this.winning = true;
+        this.winImage =
+          this.winImages[Math.floor(Math.random() * this.winImages.length)];
+        this.matchColor(this.winImage);
       }
       if (this.submissions.length == 6) {
         console.log("lose");
@@ -96,7 +132,7 @@ export default {
       if (this.winning) return;
       if (this.losing) return;
       if (guess?.length != 5) return;
-      // this.inDictionary = await this.checkInDictionary(guess);
+      this.inDictionary = await this.checkInDictionary(guess);
       if (!this.inDictionary) return;
 
       guess = guess?.toUpperCase();
@@ -193,6 +229,7 @@ nav a.router-link-exact-active {
   width: 30px;
   height: 30px;
   text-transform: capitalize;
+  background-color: whitesmoke;
 }
 
 .correct-spot {
