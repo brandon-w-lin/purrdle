@@ -21,14 +21,19 @@
     <div v-if="winning">
       <img :src="winImage" alt="happy cat" />
     </div>
-    <div v-else-if="losing">Sorry! The word was {{ target }}</div>
-    <div v-else-if="!inDictionary">Not in dictionary</div>
-    <div v-else class="guess-holder">
-      <p class="letters">{{ guess[0] || "" }}</p>
-      <p class="letters">{{ guess[1] || "" }}</p>
-      <p class="letters">{{ guess[2] || "" }}</p>
-      <p class="letters">{{ guess[3] || "" }}</p>
-      <p class="letters">{{ guess[4] || "" }}</p>
+    <div v-else-if="losing">
+      <h2>Sorry! The word was {{ target }}</h2>
+      <img :src="loseImage" alt="happy cat" />
+    </div>
+    <div v-else>
+      <div class="guess-holder">
+        <p class="letters">{{ guess[0] || "" }}</p>
+        <p class="letters">{{ guess[1] || "" }}</p>
+        <p class="letters">{{ guess[2] || "" }}</p>
+        <p class="letters">{{ guess[3] || "" }}</p>
+        <p class="letters">{{ guess[4] || "" }}</p>
+      </div>
+      <div v-if="!inDictionary">Not in dictionary</div>
     </div>
     <input
       type="text"
@@ -78,6 +83,7 @@ export default {
         "https://i.giphy.com/media/IkwD0hpaqza8MM5e8J/giphy.webp",
         "https://i.giphy.com/media/4L7Q2eAKjd2wM/giphy.webp",
       ],
+      loseImage: "",
     };
   },
   methods: {
@@ -93,7 +99,7 @@ export default {
         document.body.style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
       };
     },
-    handleWin() {
+    handleWinLoss() {
       let score = this.submissions
         .slice(-1)
         .pop()[1]
@@ -108,6 +114,8 @@ export default {
       if (this.submissions.length == 6) {
         console.log("lose");
         this.losing = true;
+        this.loseImage =
+          this.loseImages[Math.floor(Math.random() * this.winImages.length)];
       }
     },
     checkInDictionary(word) {
@@ -158,7 +166,7 @@ export default {
       this.submissions.push(submission);
 
       // Handle win condition
-      this.handleWin();
+      this.handleWinLoss();
       // Clear out the v-model guess
       this.guess = "";
     },
