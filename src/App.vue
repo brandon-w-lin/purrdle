@@ -118,6 +118,7 @@ export default {
         this.losing = true;
         this.loseImage =
           this.loseImages[Math.floor(Math.random() * this.loseImages.length)];
+        this.matchColor(this.loseImage);
       }
     },
     checkInDictionary(word) {
