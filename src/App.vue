@@ -117,7 +117,7 @@ export default {
       if (this.submissions.length == 6) {
         this.losing = true;
         this.loseImage =
-          this.loseImages[Math.floor(Math.random() * this.winImages.length)];
+          this.loseImages[Math.floor(Math.random() * this.loseImages.length)];
       }
     },
     checkInDictionary(word) {
