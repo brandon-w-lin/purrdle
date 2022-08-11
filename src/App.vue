@@ -7,14 +7,6 @@
   <router-view /> -->
     <h1>Purrdle</h1>
     <h2>Like wordle, but it purrs</h2>
-    <div class="guess-holder">
-      <p class="letters">{{ guess[0] }}</p>
-      <p class="letters">{{ guess[1] }}</p>
-      <p class="letters">{{ guess[2] }}</p>
-      <p class="letters">{{ guess[3] }}</p>
-      <p class="letters">{{ guess[4] }}</p>
-    </div>
-    <!-- {{ submissions }} -->
     <div
       class="guess-holder"
       v-for="submission in submissions"
@@ -25,7 +17,18 @@
           {{ letter }}
         </p>
       </div>
-      <!-- <p class="letters submitted">{{ letter[index] }}</p> -->
+    </div>
+    <div v-if="winning">
+      <div>Congrats, you win!</div>
+    </div>
+    <div v-else-if="losing">Sorry! The word was {{ target }}</div>
+    <div v-else-if="!inDictionary">Not in dictionary</div>
+    <div v-else class="guess-holder">
+      <p class="letters">{{ guess[0] || "" }}</p>
+      <p class="letters">{{ guess[1] || "" }}</p>
+      <p class="letters">{{ guess[2] || "" }}</p>
+      <p class="letters">{{ guess[3] || "" }}</p>
+      <p class="letters">{{ guess[4] || "" }}</p>
     </div>
     <input
       type="text"
@@ -33,13 +36,12 @@
       v-model="guess"
       maxlength="5"
       v-on:keyup.enter="handleGuess(guess)"
+      @input="
+        if (guess?.length < 5) {
+          inDictionary = true;
+        }
+      "
     />
-    <div v-if="winning">
-      <div>Congrats, you win!</div>
-      <div>Play again?</div>
-    </div>
-    <div v-else-if="losing">Sorry! The word was {{ target }}</div>
-    <div v-else-if="!inDictionary">Not in dictionary</div>
   </div>
 </template>
 
@@ -93,14 +95,11 @@ export default {
       // Guard gates for win condition, length, in dictionary
       if (this.winning) return;
       if (this.losing) return;
-      if (guess.length != 5) return;
-      this.inDictionary = await this.checkInDictionary(guess);
-      if (!this.inDictionary) {
-        this.guess = "";
-        return;
-      }
+      if (guess?.length != 5) return;
+      // this.inDictionary = await this.checkInDictionary(guess);
+      if (!this.inDictionary) return;
 
-      guess = guess.toUpperCase();
+      guess = guess?.toUpperCase();
       this.letters[0] = guess[0] || "";
       this.letters[1] = guess[1] || "";
       this.letters[2] = guess[2] || "";
@@ -122,11 +121,10 @@ export default {
       let submission = [this.letters.map((letter) => letter), score];
       this.submissions.push(submission);
 
-      // Clear out the v-model guess
-      this.guess = "";
-
       // Handle win condition
       this.handleWin();
+      // Clear out the v-model guess
+      this.guess = "";
     },
     setClass(score) {
       if (score == 2) {
