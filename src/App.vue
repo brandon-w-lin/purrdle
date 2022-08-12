@@ -10,7 +10,7 @@
   </div>
   <div v-if="winning">
     <div>
-      <button @click="reset()">Play again?</button>
+      <button @click="reload()">Play again?</button>
     </div>
     <div>
       <img :src="winImage" alt="happy cat" />
@@ -19,7 +19,7 @@
   <div v-else-if="losing">
     <h2>Sorry! The word was {{ target }}</h2>
     <div>
-      <button @click="reset()">Play again?</button>
+      <button @click="location.reload()">Play again?</button>
     </div>
     <img :src="loseImage" alt="sad cat" />
   </div>
@@ -87,8 +87,8 @@ export default {
     };
   },
   methods: {
-    reset() {
-      this.$forceUpdate;
+    reload() {
+      location.reload();
     },
     getWord() {
       axios
