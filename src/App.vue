@@ -9,10 +9,18 @@
     </div>
   </div>
   <div v-if="winning">
-    <img :src="winImage" alt="happy cat" />
+    <div>
+      <button @click="reset()">Play again?</button>
+    </div>
+    <div>
+      <img :src="winImage" alt="happy cat" />
+    </div>
   </div>
   <div v-else-if="losing">
     <h2>Sorry! The word was {{ target }}</h2>
+    <div>
+      <button @click="reset()">Play again?</button>
+    </div>
     <img :src="loseImage" alt="sad cat" />
   </div>
   <div v-else>
@@ -79,6 +87,9 @@ export default {
     };
   },
   methods: {
+    reset() {
+      this.$forceUpdate;
+    },
     getWord() {
       axios
         .get("https://random-word-api.herokuapp.com/word?length=5")
