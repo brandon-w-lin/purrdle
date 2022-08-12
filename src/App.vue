@@ -84,6 +84,9 @@ export default {
         "https://i.giphy.com/media/4L7Q2eAKjd2wM/giphy.webp",
       ],
       loseImage: "",
+      moew: new Audio(
+        "https://cdn.freesound.org/previews/412/412016_3652520-lq.mp3"
+      ),
     };
   },
   methods: {
@@ -117,6 +120,7 @@ export default {
         .pop()[1]
         .reduce((a, b) => a + b);
       if (score == 10) {
+        this.moew.play();
         this.winning = true;
         this.winImage =
           this.winImages[Math.floor(Math.random() * this.winImages.length)];
