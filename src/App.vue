@@ -234,6 +234,12 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 
+@media screen and (max-width: 767px) {
+  input {
+    font-size: 16px;
+  }
+}
+
 #guessInput {
   position: absolute;
   top: -50px;
