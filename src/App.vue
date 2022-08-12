@@ -258,10 +258,11 @@ nav a.router-link-exact-active {
   align-items: center;
   margin: 2px;
   border: solid;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   text-transform: capitalize;
   background-color: whitesmoke;
+  font-size: 30px;
 }
 
 .correct-spot {
