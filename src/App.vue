@@ -121,8 +121,7 @@ export default {
         this.winImage =
           this.winImages[Math.floor(Math.random() * this.winImages.length)];
         this.matchColor(this.winImage);
-      }
-      if (this.submissions.length == 6) {
+      } else if (this.submissions.length == 6) {
         this.losing = true;
         this.loseImage =
           this.loseImages[Math.floor(Math.random() * this.loseImages.length)];
