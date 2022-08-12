@@ -205,6 +205,9 @@ export default {
     document.addEventListener("click", () => {
       this.setFocus();
     });
+    document.addEventListener("touchstart", () => {
+      this.setFocus();
+    });
   },
 };
 </script>
