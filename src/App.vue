@@ -202,6 +202,9 @@ export default {
   mounted() {
     this.setFocus();
     this.getWord();
+    document.addEventListener("click", () => {
+      this.setFocus();
+    });
   },
 };
 </script>
