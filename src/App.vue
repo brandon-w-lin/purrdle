@@ -2,11 +2,14 @@
   <h1>Purrdle</h1>
   <h2>Like wordle, but it purrs</h2>
   <div class="guess-holder" v-for="submission in submissions" :key="submission">
-    <div v-for="(letter, index) in submission[0]" :key="index">
-      <p class="letters" :class="setClass(submission[1][index])">
-        {{ letter }}
-      </p>
-    </div>
+    <p
+      class="letters"
+      :class="setClass(submission[1][index])"
+      v-for="(letter, index) in submission[0]"
+      :key="index"
+    >
+      {{ letter }}
+    </p>
   </div>
   <div v-if="winning">
     <div>
@@ -24,6 +27,7 @@
     <img :src="loseImage" alt="sad cat" />
   </div>
   <div v-else>
+    <!-- <div class="guesses-holder"> -->
     <div class="guess-holder">
       <p class="letters">{{ guess[0] || "" }}</p>
       <p class="letters">{{ guess[1] || "" }}</p>
@@ -31,6 +35,7 @@
       <p class="letters">{{ guess[3] || "" }}</p>
       <p class="letters">{{ guess[4] || "" }}</p>
     </div>
+    <!-- </div> -->
     <div v-if="!inDictionary">Not in dictionary</div>
     <div v-else-if="alreadySubmitted">Word already submitted</div>
   </div>
@@ -247,26 +252,14 @@ export default {
   color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-
 @media screen and (max-width: 767px) {
   input {
-    font-size: 16px;
+    font-size: 16px; /* this is the min size to avoid "zoom in " behavior on focus */
   }
 }
 
 #guessInput {
+  /* this element is hidden off screen */
   position: absolute;
   top: -50px;
   left: -50px;
@@ -285,7 +278,8 @@ nav a.router-link-exact-active {
   margin: 2px;
   border: solid;
   width: 50px;
-  height: 50px;
+  height: auto;
+  aspect-ratio: 1;
   text-transform: capitalize;
   background-color: whitesmoke;
   font-size: 30px;
