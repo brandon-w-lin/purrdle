@@ -103,8 +103,14 @@ export default {
     onChange() {
       //
     },
-    onKeyPress() {
-      //
+    onKeyPress(button) {
+      if (button == "{backspace}") {
+        this.guess = this.guess.slice(0, -1);
+      } else if (button == "{enter}") {
+        this.handleGuess(this.guess);
+      } else {
+        this.guess += button;
+      }
     },
     reload() {
       location.reload();
