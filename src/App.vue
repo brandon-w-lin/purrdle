@@ -47,12 +47,20 @@
       }
     "
   />
+  <SimpleKeyboard
+    @onChange="onChange"
+    @onKeyPress="onKeyPress"
+    :input="input"
+  />
 </template>
 
 <script>
 import axios from "axios";
-
+import SimpleKeyboard from "./components/SimpleKeyboard.vue";
 export default {
+  components: {
+    SimpleKeyboard,
+  },
   data() {
     return {
       target: "",
