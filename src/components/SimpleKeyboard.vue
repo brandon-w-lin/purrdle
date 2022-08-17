@@ -168,6 +168,6 @@ export default {
   max-width: 80px;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-submitted {
-  border: solid;
+  background: #6e6e6e;
 }
 </style>
