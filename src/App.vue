@@ -64,7 +64,6 @@ export default {
   },
   data() {
     return {
-      submittedKeys: ["A"],
       target: "",
       guess: "",
       letters: [],
