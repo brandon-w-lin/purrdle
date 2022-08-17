@@ -8,6 +8,7 @@ import "simple-keyboard/build/css/index.css";
 
 export default {
   name: "SimpleKeyboard",
+  emits: ["onChange", "onKeyPress"],
   props: {
     keyboardClass: {
       default: "simple-keyboard",
@@ -16,6 +17,9 @@ export default {
     input: {
       type: String,
     },
+    submissions: {
+      type: Array,
+    },
   },
   data: () => ({
     keyboard: null,
@@ -23,11 +27,11 @@ export default {
       default: [
         "Q W E R T Y U I O P",
         "A S D F G H J K L",
-        "{submit} Z X C V B N M {backspace}",
+        "{enter} Z X C V B N M {backspace}",
       ],
     },
     display: {
-      "{submit}": "in",
+      "{enter}": "enter",
       "{backspace}": "⌫",
     },
     theme: "hg-theme-default hg-theme-ios",
@@ -66,16 +70,24 @@ export default {
     input(input) {
       this.keyboard.setInput(input);
     },
+    submittedKeys() {
+      this.keyboard.addButtonTheme(this.submittedKeys, "hg-submitted");
+    },
+  },
+  computed: {
+    submittedKeys() {
+      // if (this.submissions) {
+      return this.submissions
+        .map((submission) => submission[0])
+        .flat()
+        .filter((x, i, a) => a.indexOf(x) == i)
+        .join(" ");
+    },
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-/**
- * hg-theme-default theme
- */
-
 .hg-button {
   width: 10px;
 }
@@ -96,14 +108,6 @@ export default {
 }
 .simple-keyboard.hg-theme-ios .hg-row .hg-button:not(:last-child) {
   margin-right: 5px;
-}
-.simple-keyboard.hg-theme-ios .hg-row:last-child .hg-button:last-child {
-  /* border: solid; */
-  padding: 0% 4%;
-}
-.simple-keyboard.hg-theme-ios .hg-row:last-child .hg-button:first-child {
-  /* border: solid; */
-  padding: 0% 4%;
 }
 
 .simple-keyboard.hg-theme-ios .hg-row:nth-child(2) {
@@ -150,17 +154,20 @@ export default {
   .hg-button.hg-button-shiftactivated {
   background-color: #ffffff;
 }
-.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button-space {
-  max-width: 448px;
-  min-width: 448px;
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button-backspace {
+  min-width: 50px;
+  padding: 0% 4%;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button-enter {
-  max-width: 110px;
-  min-width: 110px;
+  min-width: 50px;
+  padding: 0% 4%;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button-altright,
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button-back {
   min-width: 80px;
   max-width: 80px;
+}
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-submitted {
+  border: solid;
 }
 </style>

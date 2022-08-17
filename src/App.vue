@@ -51,6 +51,7 @@
     @onChange="onChange"
     @onKeyPress="onKeyPress"
     :input="input"
+    :submissions="submissions"
   />
 </template>
 
@@ -63,6 +64,7 @@ export default {
   },
   data() {
     return {
+      submittedKeys: ["A"],
       target: "",
       guess: "",
       letters: [],
@@ -95,9 +97,16 @@ export default {
       moew: new Audio(
         "https://cdn.freesound.org/previews/412/412016_3652520-lq.mp3"
       ),
+      input: "",
     };
   },
   methods: {
+    onChange() {
+      //
+    },
+    onKeyPress() {
+      //
+    },
     reload() {
       location.reload();
     },
