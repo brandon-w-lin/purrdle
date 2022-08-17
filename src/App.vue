@@ -52,6 +52,7 @@
     @onKeyPress="onKeyPress"
     :input="input"
     :submissions="submissions"
+    id="keyboard"
   />
 </template>
 
@@ -295,5 +296,15 @@ nav a.router-link-exact-active {
 }
 .in-word {
   background-color: yellow;
+}
+
+#keyboard {
+  position: fixed;
+  bottom: 0;
+  /* width: 100%; */
+  /* margin: 0 auto; */
+  /* border: solid; */
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
