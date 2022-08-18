@@ -27,7 +27,6 @@
     <img :src="loseImage" alt="sad cat" />
   </div>
   <div v-else>
-    <!-- <div class="guesses-holder"> -->
     <div class="guess-holder">
       <p class="letters">{{ guess[0] || "" }}</p>
       <p class="letters">{{ guess[1] || "" }}</p>
@@ -35,7 +34,6 @@
       <p class="letters">{{ guess[3] || "" }}</p>
       <p class="letters">{{ guess[4] || "" }}</p>
     </div>
-    <!-- </div> -->
     <div v-if="!inDictionary">Not in dictionary</div>
     <div v-else-if="alreadySubmitted">Word already submitted</div>
   </div>
@@ -59,6 +57,8 @@
     :submissions="submissions"
     id="keyboard"
   />
+  {{ submittedKeys }}
+  {{ charScores }}
 </template>
 
 <script>
@@ -239,6 +239,15 @@ export default {
     document.addEventListener("touchstart", () => {
       this.setFocus();
     });
+  },
+  computed: {
+    submittedKeys() {
+      return this.submissions
+        .map((submission) => submission[0])
+        .flat()
+        .filter((x, i, a) => a.indexOf(x) == i)
+        .join(" ");
+    },
   },
 };
 </script>

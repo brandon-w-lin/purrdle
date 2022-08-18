@@ -27,12 +27,12 @@ export default {
       default: [
         "Q W E R T Y U I O P",
         "A S D F G H J K L",
-        "{enter} Z X C V B N M {backspace}",
+        "{Enter} Z X C V B N M {Backspace}",
       ],
     },
     display: {
-      "{enter}": "enter",
-      "{backspace}": "⌫",
+      "{Enter}": "enter",
+      "{Backspace}": "⌫",
     },
     theme: "hg-theme-default hg-theme-ios",
   }),
@@ -44,8 +44,24 @@ export default {
       display: this.display,
       theme: this.theme,
     });
+    document.addEventListener("keydown", (e) => this.handleKeyDown(e));
+    document.addEventListener("keyup", (e) => this.handleKeyUp(e));
   },
   methods: {
+    handleKeyDown(event) {
+      // To handle the physical keyboard press -> format on screen display
+      const key =
+        event.key.length == 1 ? event.key.toUpperCase() : `{${event.key}}`;
+      this.keyboard.addButtonTheme(key, "active");
+    },
+    handleKeyUp(event) {
+      // To handle the physical keyboard press -> format on screen display
+      console.log("keyup");
+      const key =
+        event.key.length == 1 ? event.key.toUpperCase() : `{${event.key}}`;
+
+      this.keyboard.removeButtonTheme(key, "active");
+    },
     onChange(input) {
       this.$emit("onChange", input);
     },
@@ -142,6 +158,7 @@ export default {
   min-height: 60px;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:active,
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.active,
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:focus {
   background: #e4e4e4;
 }
