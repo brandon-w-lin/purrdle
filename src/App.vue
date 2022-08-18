@@ -1,4 +1,4 @@
-<template @click="setFocus()">
+<template>
   <h1>Purrdle</h1>
   <h2>Like wordle, but it purrs</h2>
 
@@ -325,9 +325,6 @@ export default {
 #keyboard {
   position: fixed;
   bottom: 0;
-  /* width: 100%; */
-  /* margin: 0 auto; */
-  /* border: solid; */
   left: 50%;
   transform: translateX(-50%);
 }
