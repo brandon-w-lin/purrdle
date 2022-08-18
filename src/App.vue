@@ -1,6 +1,8 @@
 <template>
-  <h1>Purrdle</h1>
-  <h2>Like wordle, but it purrs</h2>
+  <div v-if="!isPlaying">
+    <h1>Purrdle</h1>
+    <h2>Like wordle, but it purrs</h2>
+  </div>
 
   <!-- HOLD SUBMITTED GUESSES -->
   <div class="guess-holder" v-for="submission in submissions" :key="submission">
@@ -125,6 +127,7 @@ export default {
         BACKSPACE: true,
         ENTER: true,
       },
+      isPlaying: false,
     };
   },
   methods: {
@@ -211,6 +214,7 @@ export default {
     },
     async handleGuess(guess) {
       // Guard gates for win condition, length, in dictionary
+      this.isPlaying = true;
       if (this.winning) return;
       if (this.losing) return;
       if (guess?.length != 5) return;
