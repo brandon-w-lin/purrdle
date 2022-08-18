@@ -1,4 +1,5 @@
 <template>
+  <!-- WELCOME -->
   <div v-if="!isPlaying">
     <h1>Purrdle</h1>
     <h2>Like wordle, but it purrs</h2>
@@ -36,11 +37,9 @@
   <!-- INPUTS AND WARNINGS -->
   <div v-else>
     <div class="guess-holder">
-      <p class="letters">{{ guess[0] || "" }}</p>
-      <p class="letters">{{ guess[1] || "" }}</p>
-      <p class="letters">{{ guess[2] || "" }}</p>
-      <p class="letters">{{ guess[3] || "" }}</p>
-      <p class="letters">{{ guess[4] || "" }}</p>
+      <p v-for="letter in 5" :key="letter" class="letters">
+        {{ guess[letter - 1] || "" }}
+      </p>
     </div>
     <div v-if="!inDictionary">Not in dictionary</div>
     <div v-else-if="alreadySubmitted">Word already submitted</div>
