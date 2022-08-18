@@ -37,24 +37,12 @@
     <div v-if="!inDictionary">Not in dictionary</div>
     <div v-else-if="alreadySubmitted">Word already submitted</div>
   </div>
-  <input
-    type="text"
-    id="guessInput"
-    v-model="guess"
-    maxlength="5"
-    v-on:keyup.enter="handleGuess(guess)"
-    @input="
-      if (guess?.length < 5) {
-        inDictionary = true;
-        alreadySubmitted = false;
-      }
-    "
-  />
   <SimpleKeyboard
     @onKeyPress="onKeyPress"
     :charScores="charScores"
     id="keyboard"
   />
+  {{ guess }}
 </template>
 
 <script>
@@ -99,16 +87,55 @@ export default {
         "https://cdn.freesound.org/previews/412/412016_3652520-lq.mp3"
       ),
       input: "",
+      acceptedChars: {
+        A: true,
+        B: true,
+        C: true,
+        D: true,
+        E: true,
+        F: true,
+        G: true,
+        H: true,
+        I: true,
+        J: true,
+        K: true,
+        L: true,
+        M: true,
+        N: true,
+        O: true,
+        P: true,
+        Q: true,
+        R: true,
+        S: true,
+        T: true,
+        U: true,
+        V: true,
+        W: true,
+        X: true,
+        Y: true,
+        Z: true,
+        BACKSPACE: true,
+        ENTER: true,
+      },
     };
   },
   methods: {
     onKeyPress(button) {
-      if (button == "{backspace}") {
-        this.guess = this.guess.slice(0, -1);
-      } else if (button == "{enter}") {
-        this.handleGuess(this.guess);
-      } else {
-        this.guess += button;
+      button = button.replace("{", "");
+      button = button.replace("}", "");
+      button = button.toUpperCase();
+      if (this.acceptedChars[button]) {
+        console.log("allowed");
+        if (button == "BACKSPACE") {
+          this.guess = this.guess.slice(0, -1);
+          this.inDictionary = true;
+          this.alreadySubmitted = false;
+        } else if (button == "ENTER") {
+          this.handleGuess(this.guess);
+        } else {
+          if (this.guess.length == 5) return;
+          this.guess += button;
+        }
       }
     },
     reload() {
@@ -206,7 +233,7 @@ export default {
 
       // Handle win condition
       this.handleWinLoss();
-      // Clear out the v-model guess
+      // Clear out the guess
       this.guess = "";
       this.alreadySubmitted = false;
     },
@@ -217,30 +244,15 @@ export default {
         return "in-word";
       }
     },
-    setFocus() {
-      {
-        document.getElementById("guessInput").focus();
-      }
-    },
   },
   mounted() {
-    this.setFocus();
     this.getWord();
-    document.addEventListener("click", () => {
-      this.setFocus();
-    });
-    document.addEventListener("touchstart", () => {
-      this.setFocus();
+    document.addEventListener("keyup", (event) => {
+      console.log(event.key);
+      this.onKeyPress(event.key);
     });
   },
   computed: {
-    // submittedKeys() {
-    //   return this.submissions
-    //     .map((submission) => submission[0])
-    //     .flat()
-    //     .filter((x, i, a) => a.indexOf(x) == i)
-    //     .join(" ");
-    // },
     charScores() {
       // converts format from (word)(wordscore) format,
       // to {letter: score} format, i.e.
