@@ -51,14 +51,10 @@
     "
   />
   <SimpleKeyboard
-    @onChange="onChange"
     @onKeyPress="onKeyPress"
-    :input="input"
-    :submissions="submissions"
     :charScores="charScores"
     id="keyboard"
   />
-  {{ charScores }}
 </template>
 
 <script>
@@ -106,9 +102,6 @@ export default {
     };
   },
   methods: {
-    onChange() {
-      //
-    },
     onKeyPress(button) {
       if (button == "{backspace}") {
         this.guess = this.guess.slice(0, -1);

@@ -14,12 +14,6 @@ export default {
       default: "simple-keyboard",
       type: String,
     },
-    input: {
-      type: String,
-    },
-    submissions: {
-      type: Array,
-    },
     charScores: {
       type: Object,
     },
@@ -30,12 +24,12 @@ export default {
       default: [
         "Q W E R T Y U I O P",
         "A S D F G H J K L",
-        "{Enter} Z X C V B N M {Backspace}",
+        "{enter} Z X C V B N M {backspace}",
       ],
     },
     display: {
-      "{Enter}": "enter",
-      "{Backspace}": "⌫",
+      "{enter}": "enter",
+      "{backspace}": "⌫",
     },
     theme: "hg-theme-default hg-theme-ios",
   }),
@@ -52,11 +46,6 @@ export default {
   methods: {
     onKeyPress(button) {
       this.$emit("onKeyPress", button);
-
-      /**
-       * If you want to handle the shift and caps lock buttons
-       */
-      if (button === "{shift}" || button === "{lock}") this.handleShift();
     },
     handleKeyDown(event) {
       // To handle the physical keyboard press -> format on screen display
@@ -66,19 +55,9 @@ export default {
     },
     handleKeyUp(event) {
       // To handle the physical keyboard press -> format on screen display
-      console.log("keyup");
       const key =
         event.key.length == 1 ? event.key.toUpperCase() : `{${event.key}}`;
-
       this.keyboard.removeButtonTheme(key, "active");
-    },
-    handleShift() {
-      let currentLayout = this.keyboard.options.layoutName;
-      let shiftToggle = currentLayout === "default" ? "shift" : "default";
-
-      this.keyboard.setOptions({
-        layoutName: shiftToggle,
-      });
     },
     handleScoreChange() {
       for (const key in this.charScores) {
@@ -94,9 +73,6 @@ export default {
     },
   },
   watch: {
-    input(input) {
-      this.keyboard.setInput(input);
-    },
     charScores() {
       this.handleScoreChange();
     },
