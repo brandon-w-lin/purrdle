@@ -1,6 +1,8 @@
 <template @click="setFocus()">
   <h1>Purrdle</h1>
   <h2>Like wordle, but it purrs</h2>
+
+  <!-- HOLD SUBMITTED GUESSES -->
   <div class="guess-holder" v-for="submission in submissions" :key="submission">
     <p
       class="letters"
@@ -11,6 +13,8 @@
       {{ letter }}
     </p>
   </div>
+
+  <!-- WIN/LOSE CONDITIONS -->
   <div v-if="winning">
     <div>
       <button @click="reload()">Play again?</button>
@@ -26,6 +30,8 @@
     </div>
     <img :src="loseImage" alt="sad cat" />
   </div>
+
+  <!-- INPUTS AND WARNINGS -->
   <div v-else>
     <div class="guess-holder">
       <p class="letters">{{ guess[0] || "" }}</p>
@@ -37,6 +43,8 @@
     <div v-if="!inDictionary">Not in dictionary</div>
     <div v-else-if="alreadySubmitted">Word already submitted</div>
   </div>
+
+  <!-- KEYBOARD -->
   <SimpleKeyboard
     @onKeyPress="onKeyPress"
     :charScores="charScores"
@@ -285,13 +293,6 @@ export default {
   input {
     font-size: 16px; /* this is the min size to avoid "zoom in " behavior on focus */
   }
-}
-
-#guessInput {
-  /* this element is hidden off screen */
-  position: absolute;
-  top: -50px;
-  left: -50px;
 }
 
 .guess-holder {
