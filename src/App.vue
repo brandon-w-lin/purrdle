@@ -28,7 +28,7 @@
   <div v-else-if="losing">
     <h2>Sorry! The word was {{ target }}</h2>
     <div>
-      <button @click="location.reload()">Play again?</button>
+      <button @click="reload()">Play again?</button>
     </div>
     <img :src="loseImage" alt="sad cat" />
   </div>
@@ -52,7 +52,6 @@
     :charScores="charScores"
     id="keyboard"
   />
-  {{ guess }}
 </template>
 
 <script>
