@@ -55,9 +55,9 @@
     @onKeyPress="onKeyPress"
     :input="input"
     :submissions="submissions"
+    :charScores="charScores"
     id="keyboard"
   />
-  {{ submittedKeys }}
   {{ charScores }}
 </template>
 
@@ -241,12 +241,27 @@ export default {
     });
   },
   computed: {
-    submittedKeys() {
-      return this.submissions
-        .map((submission) => submission[0])
-        .flat()
-        .filter((x, i, a) => a.indexOf(x) == i)
-        .join(" ");
+    // submittedKeys() {
+    //   return this.submissions
+    //     .map((submission) => submission[0])
+    //     .flat()
+    //     .filter((x, i, a) => a.indexOf(x) == i)
+    //     .join(" ");
+    // },
+    charScores() {
+      // converts format from (word)(wordscore) format,
+      // to {letter: score} format, i.e.
+      // target = act
+      // [c,a,t][0,1,2] => {c: 0, a: 1, t: 2}
+      let obj = {};
+      const zipLetterWithScore = (letters, scores) =>
+        letters.forEach((char, i) => {
+          obj[char] = obj[char] > scores[i] ? obj[char] : scores[i]; // only overwrite if higher score
+        });
+      this.submissions.forEach((submission) =>
+        zipLetterWithScore(submission[0], submission[1])
+      );
+      return obj;
     },
   },
 };

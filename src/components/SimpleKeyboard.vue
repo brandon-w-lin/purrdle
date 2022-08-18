@@ -20,6 +20,9 @@ export default {
     submissions: {
       type: Array,
     },
+    charScores: {
+      type: Object,
+    },
   },
   data: () => ({
     keyboard: null,
@@ -38,7 +41,6 @@ export default {
   }),
   mounted() {
     this.keyboard = new Keyboard(this.keyboardClass, {
-      onChange: this.onChange,
       onKeyPress: this.onKeyPress,
       layout: this.layout,
       display: this.display,
@@ -48,6 +50,14 @@ export default {
     document.addEventListener("keyup", (e) => this.handleKeyUp(e));
   },
   methods: {
+    onKeyPress(button) {
+      this.$emit("onKeyPress", button);
+
+      /**
+       * If you want to handle the shift and caps lock buttons
+       */
+      if (button === "{shift}" || button === "{lock}") this.handleShift();
+    },
     handleKeyDown(event) {
       // To handle the physical keyboard press -> format on screen display
       const key =
@@ -62,17 +72,6 @@ export default {
 
       this.keyboard.removeButtonTheme(key, "active");
     },
-    onChange(input) {
-      this.$emit("onChange", input);
-    },
-    onKeyPress(button) {
-      this.$emit("onKeyPress", button);
-
-      /**
-       * If you want to handle the shift and caps lock buttons
-       */
-      if (button === "{shift}" || button === "{lock}") this.handleShift();
-    },
     handleShift() {
       let currentLayout = this.keyboard.options.layoutName;
       let shiftToggle = currentLayout === "default" ? "shift" : "default";
@@ -81,23 +80,25 @@ export default {
         layoutName: shiftToggle,
       });
     },
+    handleScoreChange() {
+      for (const key in this.charScores) {
+        if (this.charScores[key] == 2) {
+          this.keyboard.removeButtonTheme(key, "in-word");
+          this.keyboard.addButtonTheme(key, "correct-spot");
+        } else if (this.charScores[key] == 1) {
+          this.keyboard.addButtonTheme(key, "in-word");
+        } else {
+          this.keyboard.addButtonTheme(key, "submitted");
+        }
+      }
+    },
   },
   watch: {
     input(input) {
       this.keyboard.setInput(input);
     },
-    submittedKeys() {
-      this.keyboard.addButtonTheme(this.submittedKeys, "hg-submitted");
-    },
-  },
-  computed: {
-    submittedKeys() {
-      // if (this.submissions) {
-      return this.submissions
-        .map((submission) => submission[0])
-        .flat()
-        .filter((x, i, a) => a.indexOf(x) == i)
-        .join(" ");
+    charScores() {
+      this.handleScoreChange();
     },
   },
 };
@@ -157,6 +158,14 @@ export default {
   height: 60px;
   min-height: 60px;
 }
+
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.correct-spot {
+  background-color: rgb(107, 217, 107);
+}
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.in-word {
+  background-color: yellow;
+}
+
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:active,
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.active,
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:focus {
@@ -184,7 +193,7 @@ export default {
   min-width: 80px;
   max-width: 80px;
 }
-.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-submitted {
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.submitted {
   background: #6e6e6e;
 }
 </style>
