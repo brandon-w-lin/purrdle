@@ -25,7 +25,7 @@
       <img :src="winImage" alt="happy cat" />
     </div>
   </div>
-  <div v-else-if="losing">
+  <div v-else-if="isLosing">
     <h2>Sorry! The word was {{ target }}</h2>
     <div>
       <button @click="reload()">Play again?</button>
@@ -46,7 +46,7 @@
 
   <!-- KEYBOARD -->
   <SimpleKeyboard
-    v-if="!isWinning && !losing"
+    v-if="!isWinning && !isLosing"
     @onKeyPress="onKeyPress"
     :charScores="charScores"
     id="keyboard"
@@ -67,7 +67,6 @@ export default {
       guess: "",
       letters: [],
       submissions: [],
-      losing: false,
       inDictionary: true,
       alreadySubmitted: false,
       winImages: [
@@ -172,13 +171,12 @@ export default {
       };
     },
     handleWinLoss() {
-      if (this.currentScore == 10) {
+      if (this.isWinning) {
         this.moew.play();
         this.winImage =
           this.winImages[Math.floor(Math.random() * this.winImages.length)];
         this.matchColor(this.winImage);
-      } else if (this.submissions.length == 6) {
-        this.losing = true;
+      } else if (this.isLosing) {
         this.loseImage =
           this.loseImages[Math.floor(Math.random() * this.loseImages.length)];
         this.matchColor(this.loseImage);
@@ -209,7 +207,7 @@ export default {
       // Guard gates for win condition, length, in dictionary
       this.isPlaying = true;
       if (this.isWinning) return;
-      if (this.losing) return;
+      if (this.isLosing) return;
       if (guess?.length != 5) return;
       this.inDictionary = await this.checkInDictionary(guess);
       if (!this.inDictionary) return;
@@ -287,6 +285,9 @@ export default {
     },
     isWinning() {
       return this.currentScore === 10 ? true : false;
+    },
+    isLosing() {
+      return !this.isWinning && this.submissions.length == 6;
     },
   },
 };
