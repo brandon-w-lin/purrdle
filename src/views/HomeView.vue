@@ -206,12 +206,22 @@ export default {
     async handleGuess(guess) {
       // Guard gates for win condition, length, in dictionary
       this.isPlaying = true;
-      if (this.isWinning) return;
-      if (this.isLosing) return;
-      if (guess?.length != 5) return;
+
+      if (
+        this.isWinning ||
+        this.isLosing ||
+        guess?.length != 5 ||
+        this.isAlreadySubmitted
+      ) {
+        return;
+      }
       this.inDictionary = await this.checkInDictionary(guess);
       if (!this.inDictionary) return;
-      if (this.isAlreadySubmitted) return;
+
+      // if (this.isLosing) return;
+      // if (guess?.length != 5) return;
+      // if (!this.inDictionary) return;
+      // if (this.isAlreadySubmitted) return;
       guess = guess?.toUpperCase();
       this.letters[0] = guess[0] || "";
       this.letters[1] = guess[1] || "";
