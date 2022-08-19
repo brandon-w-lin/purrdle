@@ -131,7 +131,6 @@ export default {
       button = button.replace("}", "");
       button = button.toUpperCase();
       if (this.acceptedChars[button]) {
-        console.log("allowed");
         if (button == "BACKSPACE") {
           this.guess = this.guess.slice(0, -1);
           this.inDictionary = true;
@@ -230,7 +229,6 @@ export default {
   mounted() {
     this.getWord();
     document.addEventListener("keyup", (event) => {
-      console.log(event.key);
       this.onKeyPress(event.key);
     });
   },
