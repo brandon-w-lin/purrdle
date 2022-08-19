@@ -5,15 +5,6 @@
     <h2>Like wordle, but it purrs</h2>
   </div>
 
-  <div>
-    Computed Properties:
-    <p>guess: {{ guess }}</p>
-    <p>currentScore: {{ currentScore }}</p>
-    <p>isWinning: {{ isWinning }}</p>
-    <p>isLosing: {{ isLosing }}</p>
-    <p>submittedWords: {{ submittedWords }}</p>
-    <p>isAlreadySubmitted: {{ isAlreadySubmitted }}</p>
-  </div>
   <!-- HOLD SUBMITTED GUESSES -->
   <div class="guess-holder" v-for="submission in submissions" :key="submission">
     <p
@@ -207,8 +198,8 @@ export default {
 
       return true;
     },
-    handleGuess(guess) {
-      if (!this.isGuessAllowed(guess)) return;
+    async handleGuess(guess) {
+      if (!(await this.isGuessAllowed(guess))) return;
       const score = this.calculateScoreArray(guess);
       const submission = [this.guess.split(""), score];
       this.submissions.push(submission);
@@ -258,10 +249,8 @@ export default {
   },
   computed: {
     charScores() {
-      // converts format from (word)(wordscore) format,
-      // to {letter: score} format, i.e.
-      // target = act
-      // [c,a,t][0,1,2] => {c: 0, a: 1, t: 2}
+      // creates k,v pairs for letter, score
+      // i.e. [c,a,t][0,1,2] => {c: 0, a: 1, t: 2}
       let obj = {};
       const zipLetterWithScore = (letters, scores) =>
         letters.forEach((char, i) => {
