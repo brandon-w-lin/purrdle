@@ -7,6 +7,7 @@
 
   <div>
     Computed Properties:
+    <p>guess: {{ guess }}</p>
     <p>currentScore: {{ currentScore }}</p>
     <p>isWinning: {{ isWinning }}</p>
     <p>isLosing: {{ isLosing }}</p>
@@ -74,7 +75,6 @@ export default {
       // Needed at top level
       target: "",
       guess: "",
-      letters: [],
       submissions: [],
       inDictionary: true,
       winImages: [
@@ -207,30 +207,22 @@ export default {
       this.inDictionary = await this.checkInDictionary(guess);
       if (!this.inDictionary) return;
 
-      // if (this.isLosing) return;
-      // if (guess?.length != 5) return;
-      // if (!this.inDictionary) return;
-      // if (this.isAlreadySubmitted) return;
-      guess = guess?.toUpperCase();
-      this.letters[0] = guess[0] || "";
-      this.letters[1] = guess[1] || "";
-      this.letters[2] = guess[2] || "";
-      this.letters[3] = guess[3] || "";
-      this.letters[4] = guess[4] || "";
-
       // Check for matches
-      let score = this.letters.map((letter, index) => {
-        if (this.target[index] == letter) {
-          return 2;
-        } else if (this.target.includes(letter)) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
+      let score = this.guess
+        .toUpperCase()
+        .split("")
+        .map((letter, index) => {
+          if (this.target[index] == letter) {
+            return 2;
+          } else if (this.target.includes(letter)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
 
       // Create formatted submission with word and score
-      let submission = [this.letters.map((letter) => letter), score];
+      let submission = [this.guess.split(""), score];
       this.submissions.push(submission);
 
       // Handle win condition
