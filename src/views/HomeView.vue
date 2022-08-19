@@ -166,6 +166,7 @@ export default {
         });
     },
     matchColor(imgSrc) {
+      // Ensures that win/loss cat images match background
       const myImg = new Image();
       myImg.crossOrigin = "Anonymous";
       myImg.src = imgSrc;
@@ -175,18 +176,6 @@ export default {
         const { data } = context.getImageData(10, 10, 1, 1);
         document.body.style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
       };
-    },
-    handleWinLoss() {
-      if (this.isWinning) {
-        this.moew.play();
-        this.winImage =
-          this.winImages[Math.floor(Math.random() * this.winImages.length)];
-        this.matchColor(this.winImage);
-      } else if (this.isLosing) {
-        this.loseImage =
-          this.loseImages[Math.floor(Math.random() * this.loseImages.length)];
-        this.matchColor(this.loseImage);
-      }
     },
     checkInDictionary(word) {
       if (word == this.target) return true; // needed to reconcile when target word is not in dictionary API
@@ -245,7 +234,7 @@ export default {
       this.submissions.push(submission);
 
       // Handle win condition
-      this.handleWinLoss();
+      // this.handleWinLoss();
       // Clear out the guess
       this.guess = "";
     },
@@ -265,8 +254,16 @@ export default {
     });
   },
   watch: {
-    currentScore() {
-      // if
+    isWinning() {
+      this.moew.play();
+      this.winImage =
+        this.winImages[Math.floor(Math.random() * this.winImages.length)];
+      this.matchColor(this.winImage);
+    },
+    isLosing() {
+      this.loseImage =
+        this.loseImages[Math.floor(Math.random() * this.loseImages.length)];
+      this.matchColor(this.loseImage);
     },
   },
   computed: {
