@@ -113,16 +113,14 @@ export default {
   padding: 5px;
   border-radius: 5px;
 }
-.simple-keyboard.hg-theme-ios.hg-theme-default.hg-layout-custom {
-  background-color: #e5e5e5;
-  padding: 5px;
-}
+
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button {
   border-radius: 5px;
   box-sizing: border-box;
   padding: 0;
-  background: rgb(249, 249, 249);
-  border-bottom: 1px solid #b5b5b5;
+  color: var(--font-color);
+  background: var(--primary-color);
+  border-bottom: none;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -137,26 +135,22 @@ export default {
 }
 
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.correct-spot {
-  background-color: rgb(107, 217, 107);
+  background-color: var(--success-bg-color);
+  /* background-color: rgb(107, 217, 107); */
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.in-word {
-  background-color: yellow;
+  background-color: var(--almost-bg-color);
 }
 
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:active,
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.active,
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:focus {
-  background: #e4e4e4;
+  background: var(--secondary-color);
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-functionBtn {
-  background-color: #adb5bb;
+  background-color: var(--secondary-color);
 }
-.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-button-space,
-.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-button-shift,
-.simple-keyboard.hg-theme-ios.hg-theme-default
-  .hg-button.hg-button-shiftactivated {
-  background-color: #ffffff;
-}
+
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button-backspace {
   min-width: 50px;
   padding: 0% 4%;
@@ -171,6 +165,6 @@ export default {
   max-width: 80px;
 }
 .simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.submitted {
-  background: #6e6e6e;
+  background: var(--secondary-color);
 }
 </style>

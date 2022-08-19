@@ -113,14 +113,6 @@ export default {
   watch: {
     isWinning() {
       this.moew.play();
-      this.winImage =
-        this.winImages[Math.floor(Math.random() * this.winImages.length)];
-      this.matchColor(this.winImage);
-    },
-    isLosing() {
-      this.loseImage =
-        this.loseImages[Math.floor(Math.random() * this.loseImages.length)];
-      this.matchColor(this.loseImage);
     },
   },
   computed: {
@@ -267,22 +259,14 @@ export default {
 <style>
 :root {
   --bg-color: #000000;
-  --primary-color: #000000;
+  --primary-color: #5d5d5d;
   --secondary-color: #2f2f2f;
-  --font-color-negative: grayscale;
-  --font-color-positive: whitesmoke;
+  --font-color: whitesmoke;
   --header-color: whitesmoke;
   --success-bg-color: rgba(107, 217, 107, 0.808);
   --success-font-color: rgb(255, 255, 255);
   --almost-bg-color: rgb(194, 184, 0);
   --almost-font-color: rgb(255, 255, 255);
-}
-
-[data-theme="dark"] {
-  --primary-color: #000000;
-  --secondary-color: #010101;
-  --font-color: whitesmoke;
-  --bg-color: #000000;
 }
 
 #app {
@@ -322,7 +306,7 @@ body {
   border: solid;
   border-width: 2px;
   border-color: var(--secondary-color);
-  color: var(--font-color-positive);
+  color: var(--font-color);
   font-weight: bold;
   width: 50px;
   height: auto;
