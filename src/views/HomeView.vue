@@ -190,6 +190,8 @@ export default {
       }
     },
     checkInDictionary(word) {
+      if (word == this.target) return true; // needed to reconcile when target word is not in dictionary API
+
       let test = axios
         .get("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
         .then((response) => {
