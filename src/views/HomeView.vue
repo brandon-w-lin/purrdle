@@ -17,7 +17,7 @@
   </div>
 
   <!-- WIN/LOSE CONDITIONS -->
-  <div v-if="winning">
+  <div v-if="isWinning">
     <div>
       <button @click="reload()">Play again?</button>
     </div>
@@ -46,7 +46,7 @@
 
   <!-- KEYBOARD -->
   <SimpleKeyboard
-    v-if="!winning && !losing"
+    v-if="!isWinning && !losing"
     @onKeyPress="onKeyPress"
     :charScores="charScores"
     id="keyboard"
@@ -67,7 +67,6 @@ export default {
       guess: "",
       letters: [],
       submissions: [],
-      winning: false,
       losing: false,
       inDictionary: true,
       alreadySubmitted: false,
@@ -175,7 +174,6 @@ export default {
     handleWinLoss() {
       if (this.currentScore == 10) {
         this.moew.play();
-        this.winning = true;
         this.winImage =
           this.winImages[Math.floor(Math.random() * this.winImages.length)];
         this.matchColor(this.winImage);
@@ -210,7 +208,7 @@ export default {
     async handleGuess(guess) {
       // Guard gates for win condition, length, in dictionary
       this.isPlaying = true;
-      if (this.winning) return;
+      if (this.isWinning) return;
       if (this.losing) return;
       if (guess?.length != 5) return;
       this.inDictionary = await this.checkInDictionary(guess);
@@ -259,6 +257,11 @@ export default {
       this.onKeyPress(event.key);
     });
   },
+  watch: {
+    currentScore() {
+      // if
+    },
+  },
   computed: {
     charScores() {
       // converts format from (word)(wordscore) format,
@@ -281,6 +284,9 @@ export default {
       } else {
         return Object.values(this.charScores).reduce((a, b) => a + b);
       }
+    },
+    isWinning() {
+      return this.currentScore === 10 ? true : false;
     },
   },
 };
