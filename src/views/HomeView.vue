@@ -40,7 +40,10 @@
     <div v-if="!inDictionary">Not in dictionary</div>
     <div v-else-if="isAlreadySubmitted">Word already submitted</div>
   </div>
+
+  <!-- PICTURE -->
   <CatPicture :isWinning="isWinning" :isLosing="isLosing" />
+
   <!-- KEYBOARD -->
   <SimpleKeyboard
     v-if="!isWinning && !isLosing"
