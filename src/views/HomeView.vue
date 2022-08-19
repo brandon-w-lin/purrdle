@@ -4,6 +4,15 @@
     <h1>Purrdle</h1>
     <h2>Like wordle, but it purrs</h2>
   </div>
+
+  <div>
+    Computed Properties:
+    <p>currentScore: {{ currentScore }}</p>
+    <p>isWinning: {{ isWinning }}</p>
+    <p>isLosing: {{ isLosing }}</p>
+    <p>submittedWords: {{ submittedWords }}</p>
+    <p>isAlreadySubmitted: {{ isAlreadySubmitted }}</p>
+  </div>
   <!-- HOLD SUBMITTED GUESSES -->
   <div class="guess-holder" v-for="submission in submissions" :key="submission">
     <p
@@ -41,7 +50,7 @@
       </p>
     </div>
     <div v-if="!inDictionary">Not in dictionary</div>
-    <div v-else-if="alreadySubmitted">Word already submitted</div>
+    <div v-else-if="isAlreadySubmitted">Word already submitted</div>
   </div>
 
   <!-- KEYBOARD -->
@@ -68,7 +77,6 @@ export default {
       letters: [],
       submissions: [],
       inDictionary: true,
-      alreadySubmitted: false,
       winImages: [
         "https://i.giphy.com/media/LRHBzifRrWQky9zAO7/giphy.webp",
         "https://i.giphy.com/media/T2zhJop5K1joHXd3DJ/giphy.webp",
@@ -137,7 +145,6 @@ export default {
         if (button == "BACKSPACE") {
           this.guess = this.guess.slice(0, -1);
           this.inDictionary = true;
-          this.alreadySubmitted = false;
         } else if (button == "ENTER") {
           this.handleGuess(this.guess);
         } else {
@@ -196,13 +203,6 @@ export default {
         });
       return test;
     },
-    isAlreadySubmitted(word) {
-      const words = this.submissions.map((submission) =>
-        submission[0].join("")
-      );
-      this.alreadySubmitted = true;
-      return words.includes(word.toUpperCase());
-    },
     async handleGuess(guess) {
       // Guard gates for win condition, length, in dictionary
       this.isPlaying = true;
@@ -211,7 +211,7 @@ export default {
       if (guess?.length != 5) return;
       this.inDictionary = await this.checkInDictionary(guess);
       if (!this.inDictionary) return;
-      if (this.isAlreadySubmitted(guess)) return;
+      if (this.isAlreadySubmitted) return;
       guess = guess?.toUpperCase();
       this.letters[0] = guess[0] || "";
       this.letters[1] = guess[1] || "";
@@ -238,7 +238,6 @@ export default {
       this.handleWinLoss();
       // Clear out the guess
       this.guess = "";
-      this.alreadySubmitted = false;
     },
     setClass(score) {
       if (score == 2) {
@@ -288,6 +287,12 @@ export default {
     },
     isLosing() {
       return !this.isWinning && this.submissions.length == 6;
+    },
+    submittedWords() {
+      return this.submissions.map((submission) => submission[0].join(""));
+    },
+    isAlreadySubmitted() {
+      return this.submittedWords.includes(this.guess.toUpperCase());
     },
   },
 };
