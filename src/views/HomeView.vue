@@ -22,16 +22,12 @@
     <div>
       <button @click="reload()" class="play-again">Play again?</button>
     </div>
-    <div>
-      <img :src="winImage" alt="happy cat" class="win-loss-image" />
-    </div>
   </div>
   <div v-else-if="isLosing">
     <h2>Sorry! The word was {{ target }}</h2>
     <div>
       <button @click="reload()" class="play-again">Play again?</button>
     </div>
-    <img :src="loseImage" alt="sad cat" class="win-loss-image" />
   </div>
 
   <!-- INPUTS AND WARNINGS -->
@@ -44,7 +40,7 @@
     <div v-if="!inDictionary">Not in dictionary</div>
     <div v-else-if="isAlreadySubmitted">Word already submitted</div>
   </div>
-
+  <CatPicture :isWinning="isWinning" :isLosing="isLosing" />
   <!-- KEYBOARD -->
   <SimpleKeyboard
     v-if="!isWinning && !isLosing"
@@ -57,38 +53,18 @@
 <script>
 import axios from "axios";
 import SimpleKeyboard from "../components/SimpleKeyboard.vue";
+import CatPicture from "../components/CatPicture.vue";
 export default {
   components: {
     SimpleKeyboard,
+    CatPicture,
   },
   data() {
     return {
-      // Needed at top level
       target: "",
       guess: "",
       submissions: [],
       inDictionary: true,
-      winImages: [
-        "https://i.giphy.com/media/LRHBzifRrWQky9zAO7/giphy.webp",
-        "https://i.giphy.com/media/T2zhJop5K1joHXd3DJ/giphy.webp",
-        "https://i.giphy.com/media/IcJ6n6VJNjRNS/giphy.webp",
-        "https://i.giphy.com/media/Jmlv4CUO1qWlGWJf3J/giphy.webp",
-        "https://i.giphy.com/media/H3NF3JvE1mOsOXb8l3/giphy.webp",
-        "https://i.giphy.com/media/jEl8zlvatJBVS/giphy.webp",
-        "https://i.giphy.com/media/AwroDzTSZ2SDRjbGll/giphy.webp",
-        "https://i.giphy.com/media/VP62gZkQXtTgfFUa1Z/giphy.webp",
-        "https://i.giphy.com/media/jU2IAEtFVGBDMu2vWg/giphy.webp",
-        "https://i.giphy.com/media/hGFiFeUFnvUPjW8lEZ/giphy.webp",
-        "https://i.giphy.com/media/2YgW9PZJpIhjL7b6Zt/giphy.webp",
-        "https://i.giphy.com/media/117IVXpuqIITx6/giphy.webp",
-      ],
-      winImage: "",
-      loseImages: [
-        "https://i.giphy.com/media/BCI6CWVkNUefm/giphy.webp",
-        "https://i.giphy.com/media/IkwD0hpaqza8MM5e8J/giphy.webp",
-        "https://i.giphy.com/media/4L7Q2eAKjd2wM/giphy.webp",
-      ],
-      loseImage: "",
       moew: new Audio(
         "https://cdn.freesound.org/previews/412/412016_3652520-lq.mp3"
       ),
@@ -371,9 +347,6 @@ body {
 }
 .in-word .letter {
   color: var(--almost-font-color);
-}
-.win-loss-image {
-  max-width: 275px;
 }
 
 .play-again {
