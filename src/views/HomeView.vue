@@ -125,107 +125,6 @@ export default {
       },
     };
   },
-  methods: {
-    onKeyPress(button) {
-      button = button.replace("{", "");
-      button = button.replace("}", "");
-      button = button.toUpperCase();
-      if (this.acceptedChars[button]) {
-        if (button == "BACKSPACE") {
-          this.guess = this.guess.slice(0, -1);
-          this.inDictionary = true;
-        } else if (button == "ENTER") {
-          this.handleGuess(this.guess);
-        } else {
-          if (this.guess.length == 5) return;
-          this.guess += button;
-        }
-      }
-    },
-    reload() {
-      location.reload();
-    },
-    getWord() {
-      axios
-        .get("https://random-word-api.herokuapp.com/word?length=5")
-        .then((response) => {
-          this.target = response.data[0].toUpperCase();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    matchColor(imgSrc) {
-      // Ensures that win/loss cat images match background
-      const myImg = new Image();
-      myImg.crossOrigin = "Anonymous";
-      myImg.src = imgSrc;
-      myImg.onload = () => {
-        const context = document.createElement("canvas").getContext("2d");
-        context.drawImage(myImg, 0, 0);
-        const { data } = context.getImageData(10, 10, 1, 1);
-        document.body.style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
-      };
-    },
-    checkInDictionary(word) {
-      if (word == this.target) return true; // needed to reconcile when target word is not in dictionary API
-
-      let test = axios
-        .get("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
-        .then((response) => {
-          if (response.status == 200) {
-            return true;
-          }
-          return false;
-        })
-        .catch(() => {
-          return false;
-        });
-      return test;
-    },
-    async isGuessAllowed(guess) {
-      if (
-        this.isWinning ||
-        this.isLosing ||
-        guess?.length != 5 ||
-        this.isAlreadySubmitted
-      ) {
-        return false;
-      }
-      this.inDictionary = await this.checkInDictionary(guess);
-      if (!this.inDictionary) return false;
-
-      return true;
-    },
-    async handleGuess(guess) {
-      if (!(await this.isGuessAllowed(guess))) return;
-      const score = this.calculateScoreArray(guess);
-      const submission = [this.guess.split(""), score];
-      this.submissions.push(submission);
-      this.guess = "";
-    },
-    calculateScoreArray(word) {
-      return word
-        .toUpperCase()
-        .split("")
-        .map((letter, index) => {
-          if (this.target[index] == letter) {
-            return 2;
-          } else if (this.target.includes(letter)) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-    },
-    setClass(score) {
-      if (score == 2) {
-        return "correct-spot";
-      } else if (score == 1) {
-        return "in-word";
-      }
-    },
-  },
   mounted() {
     this.getWord();
     document.addEventListener("keyup", (event) => {
@@ -280,6 +179,107 @@ export default {
     },
     isPlaying() {
       return this.submittedWords.length > 0;
+    },
+  },
+  methods: {
+    getWord() {
+      axios
+        .get("https://random-word-api.herokuapp.com/word?length=5")
+        .then((response) => {
+          this.target = response.data[0].toUpperCase();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    onKeyPress(button) {
+      button = button.replace("{", "");
+      button = button.replace("}", "");
+      button = button.toUpperCase();
+      if (this.acceptedChars[button]) {
+        if (button == "BACKSPACE") {
+          this.guess = this.guess.slice(0, -1);
+          this.inDictionary = true;
+        } else if (button == "ENTER") {
+          this.handleGuess(this.guess);
+        } else {
+          if (this.guess.length == 5) return;
+          this.guess += button;
+        }
+      }
+    },
+    reload() {
+      location.reload();
+    },
+    matchColor(imgSrc) {
+      // Ensures that win/loss cat images match background
+      const myImg = new Image();
+      myImg.crossOrigin = "Anonymous";
+      myImg.src = imgSrc;
+      myImg.onload = () => {
+        const context = document.createElement("canvas").getContext("2d");
+        context.drawImage(myImg, 0, 0);
+        const { data } = context.getImageData(10, 10, 1, 1);
+        document.body.style.backgroundColor = `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
+      };
+    },
+    checkInDictionary(word) {
+      if (word == this.target) return true; // needed to reconcile when target word is not in dictionary API
+
+      let test = axios
+        .get("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
+        .then((response) => {
+          if (response.status == 200) {
+            return true;
+          }
+          return false;
+        })
+        .catch(() => {
+          return false;
+        });
+      return test;
+    },
+    async isGuessAllowed(guess) {
+      if (
+        this.isWinning ||
+        this.isLosing ||
+        guess?.length != 5 ||
+        this.isAlreadySubmitted
+      ) {
+        return false;
+      }
+      this.inDictionary = await this.checkInDictionary(guess);
+      if (!this.inDictionary) return false;
+
+      return true;
+    },
+    calculateScoreArray(word) {
+      return word
+        .toUpperCase()
+        .split("")
+        .map((letter, index) => {
+          if (this.target[index] == letter) {
+            return 2;
+          } else if (this.target.includes(letter)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+    },
+    async handleGuess(guess) {
+      if (!(await this.isGuessAllowed(guess))) return;
+      const score = this.calculateScoreArray(guess);
+      const submission = [this.guess.split(""), score];
+      this.submissions.push(submission);
+      this.guess = "";
+    },
+    setClass(score) {
+      if (score == 2) {
+        return "correct-spot";
+      } else if (score == 1) {
+        return "in-word";
+      }
     },
   },
 };
