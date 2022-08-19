@@ -8,7 +8,7 @@
   <!-- HOLD SUBMITTED GUESSES -->
   <div class="guess-holder" v-for="submission in submissions" :key="submission">
     <p
-      class="letters"
+      class="letters submitted"
       :class="setClass(submission[1][index])"
       v-for="(letter, index) in submission[0]"
       :key="index"
@@ -286,12 +286,32 @@ export default {
 </script>
 
 <style>
+:root {
+  --bg-color: #000000;
+  --primary-color: #000000;
+  --secondary-color: #2f2f2f;
+  --font-color-negative: grayscale;
+  --font-color-positive: whitesmoke;
+  --header-color: whitesmoke;
+  --success-bg-color: rgba(107, 217, 107, 0.808);
+  --success-font-color: rgb(255, 255, 255);
+  --almost-bg-color: rgb(194, 184, 0);
+  --almost-font-color: rgb(255, 255, 255);
+}
+
+[data-theme="dark"] {
+  --primary-color: #000000;
+  --secondary-color: #010101;
+  --font-color: whitesmoke;
+  --bg-color: #000000;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--font-color);
 }
 
 @media screen and (max-width: 767px) {
@@ -300,10 +320,19 @@ export default {
   }
 }
 
+h1,
+h2 {
+  color: var(--header-color);
+}
+
 .guess-holder {
   justify-content: center;
   flex-direction: row;
   display: flex;
+}
+
+body {
+  background-color: var(--bg-color);
 }
 
 .letters {
@@ -312,21 +341,37 @@ export default {
   align-items: center;
   margin: 2px;
   border: solid;
+  border-width: 2px;
+  border-color: var(--secondary-color);
+  color: var(--font-color-positive);
+  font-weight: bold;
   width: 50px;
   height: auto;
   aspect-ratio: 1;
   text-transform: capitalize;
-  background-color: whitesmoke;
+  background-color: transparent;
   font-size: 30px;
 }
 
-.correct-spot {
-  background-color: rgb(107, 217, 107);
-}
-.in-word {
-  background-color: yellow;
+.submitted {
+  background-color: var(--secondary-color);
+  font-weight: bold;
+  border: none;
+  padding: 2px;
 }
 
+.correct-spot {
+  background-color: var(--success-bg-color);
+}
+.correct-spot .letter {
+  color: var(--success-font-color);
+}
+.in-word {
+  background-color: var(--almost-bg-color);
+}
+.in-word .letter {
+  color: var(--almost-font-color);
+}
 .win-loss-image {
   max-width: 275px;
 }
