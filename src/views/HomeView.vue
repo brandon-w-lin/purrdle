@@ -20,7 +20,7 @@
   <!-- WIN/LOSE CONDITIONS -->
   <div v-if="isWinning">
     <div>
-      <button @click="reload()">Play again?</button>
+      <button @click="reload()" class="play-again">Play again?</button>
     </div>
     <div>
       <img :src="winImage" alt="happy cat" class="win-loss-image" />
@@ -29,7 +29,7 @@
   <div v-else-if="isLosing">
     <h2>Sorry! The word was {{ target }}</h2>
     <div>
-      <button @click="reload()">Play again?</button>
+      <button @click="reload()" class="play-again">Play again?</button>
     </div>
     <img :src="loseImage" alt="sad cat" class="win-loss-image" />
   </div>
@@ -329,6 +329,17 @@ export default {
 
 .win-loss-image {
   max-width: 275px;
+}
+
+.play-again {
+  border: solid;
+  border-radius: 5px;
+  color: black;
+  background-color: whitesmoke;
+  font-size: 30px;
+  padding: 5px;
+  margin: 2px;
+  font-family: inherit;
 }
 #keyboard {
   position: fixed;
