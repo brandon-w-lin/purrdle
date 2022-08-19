@@ -207,8 +207,19 @@ export default {
       this.inDictionary = await this.checkInDictionary(guess);
       if (!this.inDictionary) return;
 
-      // Check for matches
-      let score = this.guess
+      let score = this.calculateScoreArray(guess);
+
+      // Create formatted submission with word and score
+      let submission = [this.guess.split(""), score];
+      this.submissions.push(submission);
+
+      // Handle win condition
+      // this.handleWinLoss();
+      // Clear out the guess
+      this.guess = "";
+    },
+    calculateScoreArray(word) {
+      return word
         .toUpperCase()
         .split("")
         .map((letter, index) => {
@@ -220,15 +231,6 @@ export default {
             return 0;
           }
         });
-
-      // Create formatted submission with word and score
-      let submission = [this.guess.split(""), score];
-      this.submissions.push(submission);
-
-      // Handle win condition
-      // this.handleWinLoss();
-      // Clear out the guess
-      this.guess = "";
     },
     setClass(score) {
       if (score == 2) {
