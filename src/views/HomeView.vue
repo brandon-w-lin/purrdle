@@ -193,29 +193,25 @@ export default {
         });
       return test;
     },
-    async handleGuess(guess) {
-      // Guard gates for win condition, length, in dictionary
-
+    async isGuessAllowed(guess) {
       if (
         this.isWinning ||
         this.isLosing ||
         guess?.length != 5 ||
         this.isAlreadySubmitted
       ) {
-        return;
+        return false;
       }
       this.inDictionary = await this.checkInDictionary(guess);
-      if (!this.inDictionary) return;
+      if (!this.inDictionary) return false;
 
-      let score = this.calculateScoreArray(guess);
-
-      // Create formatted submission with word and score
-      let submission = [this.guess.split(""), score];
+      return true;
+    },
+    handleGuess(guess) {
+      if (!this.isGuessAllowed(guess)) return;
+      const score = this.calculateScoreArray(guess);
+      const submission = [this.guess.split(""), score];
       this.submissions.push(submission);
-
-      // Handle win condition
-      // this.handleWinLoss();
-      // Clear out the guess
       this.guess = "";
     },
     calculateScoreArray(word) {
