@@ -4,7 +4,6 @@
     <h1>Purrdle</h1>
     <h2>Like wordle, but it purrs</h2>
   </div>
-
   <!-- HOLD SUBMITTED GUESSES -->
   <div class="guess-holder" v-for="submission in submissions" :key="submission">
     <p
@@ -47,6 +46,7 @@
 
   <!-- KEYBOARD -->
   <SimpleKeyboard
+    v-if="!winning && !losing"
     @onKeyPress="onKeyPress"
     :charScores="charScores"
     id="keyboard"
@@ -173,11 +173,7 @@ export default {
       };
     },
     handleWinLoss() {
-      let score = this.submissions
-        .slice(-1)
-        .pop()[1]
-        .reduce((a, b) => a + b);
-      if (score == 10) {
+      if (this.currentScore == 10) {
         this.moew.play();
         this.winning = true;
         this.winImage =
@@ -278,6 +274,13 @@ export default {
         zipLetterWithScore(submission[0], submission[1])
       );
       return obj;
+    },
+    currentScore() {
+      if (Object.keys(this.charScores).length === 0) {
+        return 0;
+      } else {
+        return Object.values(this.charScores).reduce((a, b) => a + b);
+      }
     },
   },
 };
