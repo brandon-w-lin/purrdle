@@ -23,7 +23,7 @@
       <button @click="reload()">Play again?</button>
     </div>
     <div>
-      <img :src="winImage" alt="happy cat" />
+      <img :src="winImage" alt="happy cat" class="win-loss-image" />
     </div>
   </div>
   <div v-else-if="isLosing">
@@ -31,7 +31,7 @@
     <div>
       <button @click="reload()">Play again?</button>
     </div>
-    <img :src="loseImage" alt="sad cat" />
+    <img :src="loseImage" alt="sad cat" class="win-loss-image" />
   </div>
 
   <!-- INPUTS AND WARNINGS -->
@@ -327,6 +327,9 @@ export default {
   background-color: yellow;
 }
 
+.win-loss-image {
+  max-width: 275px;
+}
 #keyboard {
   position: fixed;
   bottom: 0;
