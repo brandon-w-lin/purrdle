@@ -132,7 +132,6 @@ export default {
         BACKSPACE: true,
         ENTER: true,
       },
-      isPlaying: false,
     };
   },
   methods: {
@@ -207,7 +206,6 @@ export default {
     },
     async handleGuess(guess) {
       // Guard gates for win condition, length, in dictionary
-      this.isPlaying = true;
 
       if (
         this.isWinning ||
@@ -305,6 +303,9 @@ export default {
     },
     isAlreadySubmitted() {
       return this.submittedWords.includes(this.guess.toUpperCase());
+    },
+    isPlaying() {
+      return this.submittedWords.length > 0;
     },
   },
 };
