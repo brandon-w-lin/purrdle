@@ -43,6 +43,11 @@ export default {
     document.addEventListener("keydown", (e) => this.handleKeyDown(e));
     document.addEventListener("keyup", (e) => this.handleKeyUp(e));
   },
+  watch: {
+    charScores() {
+      this.handleScoreChange();
+    },
+  },
   methods: {
     onKeyPress(button) {
       this.$emit("onKeyPress", button);
@@ -60,6 +65,7 @@ export default {
       this.keyboard.removeButtonTheme(key, "active");
     },
     handleScoreChange() {
+      // To handle formatting of keys after checking vs. target word
       for (const key in this.charScores) {
         if (this.charScores[key] == 2) {
           this.keyboard.removeButtonTheme(key, "in-word");
@@ -70,11 +76,6 @@ export default {
           this.keyboard.addButtonTheme(key, "submitted");
         }
       }
-    },
-  },
-  watch: {
-    charScores() {
-      this.handleScoreChange();
     },
   },
 };
